@@ -1,0 +1,15 @@
+{
+  "size": 0,
+  "query": {
+     "bool": {
+     	"filter": [ 
+	  { "term": { "CallState": "IN PROGRESS"}},
+	  { "range": { "@timestamp": { "gte": "now-2d" }}} 
+	  ]
+      }	
+  },
+  "aggs": {
+    "byTenantName": { "terms": {"field": "TenantName" }},
+    "byTenantName_total" : { "value_count" : { "field" : "TenantName" } }
+  }
+}

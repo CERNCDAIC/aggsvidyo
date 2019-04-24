@@ -1,0 +1,18 @@
+{
+  "size": 0,
+  "query": {
+     "bool": {
+     	"filter": [ 
+	  { "term": { "CallState": "COMPLETED"}},
+	  { "range": { "@timestamp": { "gte": "now/d" }}},
+	  { "term": { "TenantName": "CERN"}},
+	  { "term": { "EndpointType": "C"}}
+	  ]
+      }	
+  },
+  "aggs": {
+    "byRecordingsPerDay": { 
+    	"cardinality": {"field": "UniqueCallId" }
+	}	
+  }
+}

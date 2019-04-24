@@ -1,0 +1,25 @@
+{
+  "size": 0,
+  "query": {
+     "bool": {
+     	"filter": [ 
+	  { "term": { "CallState": "COMPLETED"}},
+	  { "range": { "@timestamp": { "gte": "now/d" }}} 
+	  ]
+      }	
+  },
+  "aggs": {
+    "bySessionDuration": {
+        "terms": { "field": "TenantName" },
+	"aggs": { 
+		"sumofminutes": { "sum": { "field": "sess_duration_min" } },
+		"avgminutes": { "avg": { "field": "sess_duration_min"} },
+		"percentileminutes": { "percentiles": { "field": "sess_duration_min" } }
+	}
+    },
+    "sumofminutes_total": { "sum": { "field": "sess_duration_min" } },
+    "avgminutes_total": { "avg": { "field": "sess_duration_min"} },
+    "percentileminutes_total": { "percentiles": { "field": "sess_duration_min" } },
+    "bySessionDuration_records" : { "value_count" : { "field" : "sess_duration_min" } }
+  }
+}

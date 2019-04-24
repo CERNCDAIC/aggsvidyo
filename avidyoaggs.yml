@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avidyorollup
+spec:
+  selector:
+    matchLabels:
+      app: avidyorollup
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: avidyorollup
+    spec:
+      containers:
+      - name: logstash
+        image: gitlab-registry.cern.ch/collaborativeapps/aggsvidyo 
+        env:
+          - name: SECRET_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: esconfigsecret
+                key: username
+          - name: SECRET_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: esconfigsecret
+                key: password
+          - name: SECRET_URLSERVER
+            valueFrom:
+              secretKeyRef:
+                name: esconfigsecret
+                key: urlserver
+        command: ["logstash", "-f", "/usr/share/logstash/pipeline/logstash-aggs.config"]
+        volumeMounts:
+          - mountPath: /usr/share/logstash/pipeline/logstash-aggs.config
+            subPath: logstash-aggs.config
+            name: logstash01-config 
+            readOnly: true
+          - mountPath: /etc/grid-security
+            name: etc-grid-security
+      volumes:      
+      - name: logstash01-config
+        configMap:
+          name: logstash-config
+          items:
+          - key: logstash-aggs.config
+            path: logstash-aggs.config
+      - name: etc-grid-security
+        hostPath:
+          path: /etc/grid-security
+      imagePullSecrets:
+      - name: regcred
+ 

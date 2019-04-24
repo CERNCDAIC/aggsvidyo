@@ -1,0 +1,22 @@
+{
+  "size": 0,
+  "query": {
+     "bool": {
+     	"filter": [ 
+	  { "term": { "CallState": "COMPLETED"}},
+	  { "range": { "@timestamp": { "gte": "now/d" }}} 
+	  ]
+      }	
+  },
+  "aggs": {
+    "byApplicationOs": { 
+    	"terms": {"field": "ApplicationOs" },
+	"aggs": {
+	  "perTenant": {
+	     "terms": { "field": "TenantName" }
+	  }	
+	}	
+    },
+    "byApplicationOs_total" : { "value_count" : { "field" : "ApplicationOs" } }
+  }
+}

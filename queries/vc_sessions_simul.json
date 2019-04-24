@@ -1,0 +1,25 @@
+{
+  "size": 0,
+  "query": {
+     "bool": {
+     	"filter": [ 
+	  { "term": { "CallState": "IN PROGRESS"}},
+	  { "range": { "@timestamp": { "gte": "now-1d" }}} 
+	  ],
+	"must_not": { "term": { "EndpointType": "L" }}
+      }	
+  },
+  "aggs": {
+    "byApplicationName": { 
+    	"terms": {"field": "ApplicationName" },
+	"aggs": {
+	  "perVersion": { "terms": {"field": "ApplicationVersion" }, 
+	  	"aggs": { "perTenant": { "terms": {"field": "TenantName"} } }
+	  
+	  }
+	}	
+    },
+    "byApplicationOs_total" : { "value_count" : { "field" : "ApplicationName" } }
+  }
+}
+
