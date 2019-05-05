@@ -1,0 +1,30 @@
+{
+  "size": 0,
+  "query": {
+     "bool": {
+        "filter": [
+          { "term": { "CallState": "COMPLETED"}},
+          { "range": { "@timestamp": { "gte": "now/d" }}}
+          ]
+      }
+  },
+  "aggs": {
+    "byTenant": {
+        "terms": { "field": "TenantName"},
+        "aggs": {
+                "byConf": {
+                        "terms": {
+                                "script": "doc['ConferenceName'].value + '_' + doc['UniqueCallId'].value",
+                                "size": 10
+                        },
+                        "aggs": {
+                                "byDistinctUsers": {
+                                        "cardinality": {"field": "EndpointGUID" }
+                                }
+                        }
+                }
+        }
+    }
+  }
+}
+
