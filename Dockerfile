@@ -1,4 +1,4 @@
-FROM docker.elastic.co/logstash/logstash:6.6.2
+FROM docker.elastic.co/logstash/logstash:6.7.1
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 COPY logstash.yml /usr/share/logstash/config/logstash.yml
 #ADD config/ /usr/share/logstash/pipeline/
