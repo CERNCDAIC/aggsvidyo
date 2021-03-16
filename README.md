@@ -25,3 +25,7 @@ $ kubectl apply -f avidyoaggs.yml
 This leads to some dahsboards in Kibana e.g. how many people are connected simultaneously, meetings per month, meeting with maximum number of simultaneous attendees, use of codecs, etc.
 
 ![](./images/vidyoaggs.png)
+
+Geolocation of attendees to Vidyo Videoconference system:
+
+![](./images/vidyogeo.png)
